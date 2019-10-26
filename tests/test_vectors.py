@@ -4,6 +4,7 @@ import os
 
 import pytest
 
+from cryptography.hazmat.primitives import serialization
 from noise.connection import NoiseConnection, Keypair
 
 logger = logging.getLogger(__name__)
@@ -81,10 +82,13 @@ class TestVectors(object):
         initiator.set_as_initiator()
         self._set_keypairs(vector, initiator, ephemeral=False)
 
+        assert initiator.get_keypair(Keypair.STATIC).private.private_bytes(encoding=serialization.Encoding.Raw, format=serialization.PrivateFormat.Raw, encryption_algorithm=serialization.NoEncryption()) == vector['init_static']
+
         responder.set_prologue(vector['resp_prologue'])
         responder.set_as_responder()
         self._set_keypairs(vector, responder, ephemeral=False)
 
+        assert initiator.get_keypair(Keypair.REMOTE_STATIC).public_bytes == responder.get_keypair(Keypair.STATIC).public_bytes
         initiator.start_handshake()
         responder.start_handshake()
 

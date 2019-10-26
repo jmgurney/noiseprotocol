@@ -92,6 +92,9 @@ class NoiseConnection(object):
             self.noise_protocol.keypairs[_keypairs[keypair]] = \
                 self.noise_protocol.dh_fn.klass.from_public_bytes(fd.read())
 
+    def get_keypair(self, keypair: Keypair):
+        return self.noise_protocol.keypairs[_keypairs[keypair]]
+
     def start_handshake(self):
         self.noise_protocol.validate()
         self.noise_protocol.initialise_handshake_state()
