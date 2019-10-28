@@ -88,7 +88,6 @@ class TestVectors(object):
         responder.set_as_responder()
         self._set_keypairs(vector, responder, ephemeral=False)
 
-        assert initiator.get_keypair(Keypair.REMOTE_STATIC).public_bytes == responder.get_keypair(Keypair.STATIC).public_bytes
         initiator.start_handshake()
         responder.start_handshake()
 
@@ -102,6 +101,8 @@ class TestVectors(object):
 
             # Swap roles
             s, r = r, s
+
+        assert initiator.get_keypair(Keypair.STATIC).public_bytes == responder.get_keypair(Keypair.REMOTE_STATIC).public_bytes
 
         pt = b'this is a test message'
 

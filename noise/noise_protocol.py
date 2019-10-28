@@ -56,6 +56,8 @@ class NoiseProtocol(object):
             else:
                 self.cipher_state_encrypt = None
         self.handshake_hash = self.symmetric_state.get_handshake_hash()
+        if self.handshake_state.rs is not None:
+            self.keypairs['rs'] = self.handshake_state.rs
         del self.handshake_state
         del self.symmetric_state
         del self.cipher_state_handshake
